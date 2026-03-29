@@ -575,7 +575,6 @@
 # # ── FOOTER
 # st.markdown("---")
 # st.caption("🧠 Parkinson's Voice Analytics · UCI ML Repository · Streamlit + Plotly + Scikit-learn")
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -798,6 +797,12 @@ PL  = dict(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
            margin=dict(l=8,r=8,t=44,b=8))
 PAL = {"Parkinson's":"#7c3aed","Healthy":"#10b981"}
 
+def hex_to_rgba(hex_color, alpha=0.2):
+    """Convert hex color to rgba string for Plotly compatibility."""
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2],16), int(h[2:4],16), int(h[4:6],16)
+    return f"rgba({r},{g},{b},{alpha})"
+
 # ══════════════════════════════════════════════
 #  SIDEBAR
 # ══════════════════════════════════════════════
@@ -963,7 +968,7 @@ with tab2:
         for lbl, color in PAL.items():
             sub = dff[dff["label"]==lbl]
             fig5.add_trace(go.Violin(
-                y=sub[col], name=lbl, fillcolor=color+"33", line_color=color,
+                y=sub[col], name=lbl, fillcolor=hex_to_rgba(color, 0.2), line_color=color,
                 box_visible=True, meanline_visible=True, showlegend=(idx==0),
             ), row=r+1, col=c+1)
     fig5.update_layout(**PL, title=f"{feat_group} — Distributions by Status",
